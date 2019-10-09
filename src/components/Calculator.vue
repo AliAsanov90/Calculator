@@ -31,14 +31,18 @@ export default {
       current: '0',
       previous: null,
       operation: null,
+      equalitySignPressed: false
     }
   },
   methods: {
     clear() {
       this.current = '0'
       this.previous = null
+      this.equalitySignPressed = false
     },
     append(number) {
+      if (this.equalitySignPressed) return
+      
       if ((this.current.indexOf('0') === 0) && (this.current.indexOf('.') === -1)) {
         this.current = this.current.substring(1)
       }
@@ -82,6 +86,8 @@ export default {
       this.operation = (a, b) => a + b
     },
     getResult() {
+      this.equalitySignPressed = true
+
       let maxLengthOfResult = this.previous.length > this.current.length ? 
         this.previous.length : this.current.length
 
