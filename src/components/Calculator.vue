@@ -42,7 +42,7 @@ export default {
     },
     append(number) {
       if (this.equalitySignPressed) return
-      
+
       if ((this.current.indexOf('0') === 0) && (this.current.indexOf('.') === -1)) {
         this.current = this.current.substring(1)
       }
@@ -93,22 +93,24 @@ export default {
 
       this.current = `${this.operation(parseFloat(this.previous), parseFloat(this.current))}`
 
-      // Fixing bug of incorrect result when calculating floating point numbers 
-      if ((this.current.charAt(maxLengthOfResult + 1) === '9') && 
-        (this.current.charAt(maxLengthOfResult - 1) !== '0')) {
-        this.current = this.current
-          .substring(0, maxLengthOfResult)
-          .replace(
-            this.current.charAt(maxLengthOfResult - 1), 
-            `${parseInt(this.current.charAt(maxLengthOfResult - 1)) + 1}`
-          )
-      }
-      if (this.current.length > maxLengthOfResult) {
-        this.current = this.current.substring(0, maxLengthOfResult)
-        if (this.current.endsWith('0')) {
+      if (this.current.includes('.')) {
+        // Fixing bug of incorrect result when calculating floating point numbers 
+        if ((this.current.charAt(maxLengthOfResult + 1) === '9') && 
+          (this.current.charAt(maxLengthOfResult - 1) !== '0')) {
           this.current = this.current
-            .substring(0, 2)
-            .padEnd(maxLengthOfResult, '1')
+            .substring(0, maxLengthOfResult)
+            .replace(
+              this.current.charAt(maxLengthOfResult - 1), 
+              `${parseInt(this.current.charAt(maxLengthOfResult - 1)) + 1}`
+            )
+        }
+        if (this.current.length > maxLengthOfResult) {
+          this.current = this.current.substring(0, maxLengthOfResult)
+          if (this.current.endsWith('0')) {
+            this.current = this.current
+              .substring(0, 2)
+              .padEnd(maxLengthOfResult, '1')
+          }
         }
       }
     }
