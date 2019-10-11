@@ -68,6 +68,7 @@ export default {
     storeAndClearCurrent() {
       this.previous = this.current
       this.current = ''
+      this.equalitySignPressed = false
     },
     divide() {
       this.storeAndClearCurrent()
