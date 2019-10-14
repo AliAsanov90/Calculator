@@ -31,7 +31,8 @@ export default {
       current: '0',
       previous: null,
       operation: null,
-      equalitySignPressed: false
+      equalitySignPressed: false,
+      lastNumber: null,
     }
   },
   methods: {
@@ -39,6 +40,7 @@ export default {
       this.current = '0'
       this.previous = null
       this.equalitySignPressed = false
+      this.lastNumber = null
     },
     append(number) {
       if (this.equalitySignPressed) return
@@ -66,7 +68,9 @@ export default {
       this.current = this.current / 100
     },
     storeAndClearCurrent() {
-      this.previous = this.current
+      if (this.current !== '')
+        this.previous = this.current
+      
       this.current = ''
       this.equalitySignPressed = false
     },
@@ -87,6 +91,8 @@ export default {
       this.operation = (a, b) => a + b
     },
     getResult() {
+      this.equalitySignPressed ? this.previous = this.lastNumber : this.lastNumber = this.current
+
       this.equalitySignPressed = true
 
       let maxLengthOfResult = this.previous.length > this.current.length ? 
