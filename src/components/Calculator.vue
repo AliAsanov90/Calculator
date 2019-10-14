@@ -31,20 +31,20 @@ export default {
       current: '0',
       previous: null,
       operation: null,
-      equalitySignPressed: false,
+      isEqualitySignPressed: false,
       lastNumber: null,
-      isSubtractOrDivideOperation: false
+      typeOfOperation: '' 
     }
   },
   methods: {
     clear() {
       this.current = '0'
       this.previous = null
-      this.equalitySignPressed = false
+      this.isEqualitySignPressed = false
       this.lastNumber = null
     },
     append(number) {
-      if (this.equalitySignPressed) return
+      if (this.isEqualitySignPressed) return
 
       if ((this.current.indexOf('0') === 0) && (this.current.indexOf('.') === -1)) {
         this.current = this.current.substring(1)
@@ -73,39 +73,39 @@ export default {
         this.previous = this.current
       
       this.current = ''
-      this.equalitySignPressed = false
+      this.isEqualitySignPressed = false
     },
     divide() {
-      this.isSubtractOrDivideOperation = true
+      this.typeOfOperation = 'division' 
       this.storeAndClearCurrent()
       this.operation = (a, b) => a / b
     },
     multiply() {
-      this.isSubtractOrDivideOperation = false
+      this.typeOfOperation = 'multiplication'
       this.storeAndClearCurrent()
       this.operation = (a, b) => a * b
     },
     subtract() {
-      this.isSubtractOrDivideOperation = true
+      this.typeOfOperation = 'subtraction'
       this.storeAndClearCurrent()
       this.operation = (a, b) => a - b
     },
     add() {
-      this.isSubtractOrDivideOperation = false
+      this.typeOfOperation = 'addition'
       this.storeAndClearCurrent()
       this.operation = (a, b) => a + b
     },
     getResult() {
-      this.equalitySignPressed ? this.previous = this.lastNumber : this.lastNumber = this.current
+      this.isEqualitySignPressed ? this.previous = this.lastNumber : this.lastNumber = this.current
 
       let maxLengthOfResult = this.previous.length > this.current.length ? 
         this.previous.length : this.current.length
 
-      this.equalitySignPressed && this.isSubtractOrDivideOperation ? 
+      this.isEqualitySignPressed && (this.typeOfOperation === 'subtraction' || this.typeOfOperation === 'division') ? 
         this.current = `${this.operation(parseFloat(this.current), parseFloat(this.previous))}` :
         this.current = `${this.operation(parseFloat(this.previous), parseFloat(this.current))}`
 
-      this.equalitySignPressed = true
+      this.isEqualitySignPressed = true
 
       if (this.current.includes('.')) {
         // Fixing bug of incorrect result when calculating floating point numbers 
@@ -118,13 +118,16 @@ export default {
               `${parseInt(this.current.charAt(maxLengthOfResult - 1)) + 1}`
             )
         }
-        if (this.current.length > maxLengthOfResult) {
+
+        if (this.current.length > maxLengthOfResult && 
+        (this.typeOfOperation !== 'division' && this.typeOfOperation !== 'multiplication')) {
           this.current = this.current.substring(0, maxLengthOfResult)
           if (this.current.endsWith('0')) {
             this.current = this.current
               .substring(0, 2)
               .padEnd(maxLengthOfResult, '1')
           }
+          console.log('true')  
         }
       }
     }
