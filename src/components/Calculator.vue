@@ -33,7 +33,8 @@ export default {
       operation: null,
       isEqualitySignPressed: false,
       lastNumber: null,
-      typeOfOperation: '' 
+      typeOfOperation: '',
+      limitOfLengthInDisplay: 13
     }
   },
   methods: {
@@ -130,6 +131,10 @@ export default {
           console.log('true')  
         }
       }
+
+      // Limit the length of characters in display
+      if (this.current.length > this.limitOfLengthInDisplay) 
+        this.current = this.current.substring(0, this.limitOfLengthInDisplay)
     }
   }
 }
