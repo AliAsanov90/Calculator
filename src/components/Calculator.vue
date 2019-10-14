@@ -33,6 +33,7 @@ export default {
       operation: null,
       equalitySignPressed: false,
       lastNumber: null,
+      isSubtractOrDivideOperation: false
     }
   },
   methods: {
@@ -75,30 +76,36 @@ export default {
       this.equalitySignPressed = false
     },
     divide() {
+      this.isSubtractOrDivideOperation = true
       this.storeAndClearCurrent()
       this.operation = (a, b) => a / b
     },
     multiply() {
+      this.isSubtractOrDivideOperation = false
       this.storeAndClearCurrent()
       this.operation = (a, b) => a * b
     },
     subtract() {
+      this.isSubtractOrDivideOperation = true
       this.storeAndClearCurrent()
       this.operation = (a, b) => a - b
     },
     add() {
+      this.isSubtractOrDivideOperation = false
       this.storeAndClearCurrent()
       this.operation = (a, b) => a + b
     },
     getResult() {
       this.equalitySignPressed ? this.previous = this.lastNumber : this.lastNumber = this.current
 
-      this.equalitySignPressed = true
-
       let maxLengthOfResult = this.previous.length > this.current.length ? 
         this.previous.length : this.current.length
 
-      this.current = `${this.operation(parseFloat(this.previous), parseFloat(this.current))}`
+      this.equalitySignPressed && this.isSubtractOrDivideOperation ? 
+        this.current = `${this.operation(parseFloat(this.current), parseFloat(this.previous))}` :
+        this.current = `${this.operation(parseFloat(this.previous), parseFloat(this.current))}`
+
+      this.equalitySignPressed = true
 
       if (this.current.includes('.')) {
         // Fixing bug of incorrect result when calculating floating point numbers 
